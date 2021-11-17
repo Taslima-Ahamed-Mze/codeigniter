@@ -44,8 +44,19 @@ class UserModel extends Model
     public function join()
     {
         $builder = $this->db->table('users');
-        $builder->select('*');
+        $builder->select('users.*,service.name');
         $builder->join('service', 'service.id = users.service_id');
+        $query = $builder->get();
+        return $query->getResult();
+        
+
+    }
+    public function findOne($id)
+    {
+        $builder = $this->db->table('users');
+        $builder->select('users.*,service.name');
+        $builder->join('service', 'service.id = users.service_id');
+        $builder->where('users.id', $id);
         $query = $builder->get();
         return $query->getResult();
         

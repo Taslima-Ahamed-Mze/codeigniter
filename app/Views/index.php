@@ -35,11 +35,8 @@
               <?php 
                 foreach($users as $user): 
                     $birthDate = $user->birthdate;
-        
                     $currentDate = date("Y-m-d");
-                    
                     $age = date_diff(date_create($birthDate), date_create($currentDate));  
-        
                 ?>
               <tr>
                  <td><?php echo $user->lastname." ".$user->firstname; ?></td>
@@ -47,7 +44,11 @@
                  <td><?php echo $user->address." ".$user->zip_code; ?></td>
                  <td><?php echo $user->phone ?></td>
                  <td><?php echo $user->name; ?></td>
-                 <td><a href="<?php echo base_url('delete/'.$user->id);?>" class="btn btn-danger ">Supprimer</a></td>
+                 <td>
+                    <a href="<?php echo base_url('delete/'.$user->id);?>" class="btn btn-danger ">Supprimer</a>
+                    <a href="<?php echo base_url('edit/'.$user->id);?>" class="btn btn-info ">Editer</a>
+
+                 </td>
               </tr>
              <?php endforeach; ?>
              <?php endif; ?>

@@ -17,12 +17,7 @@ class Users extends BaseController
         // $data['users'] = $userModel->orderBy('id', 'DESC')->findAll();
         return view('index', $data);
     }
-
-    public function delete($id = null){
-        $userModel = new UserModel();
-        $data['user'] = $userModel->where('id', $id)->delete($id);
-        return $this->response->redirect(site_url('/'));
-    }  
+ 
     public function new()
     {
         $serviceModel = new ServiceModel();
@@ -67,12 +62,30 @@ class Users extends BaseController
             'phone' => $this->request->getVar('phone'),
             'service_id' => $this->request->getVar('service'),
 
-
             ); 
             $userModel->save($data);
             return $this->response->redirect(site_url('/'));
-        }
-        
-        
+        }  
     }
+    public function edit($id = null)
+    {
+        $userModel = new UserModel();
+        $serviceModel = new ServiceModel();
+        //$data['users'] = $userModel->findOne($id);
+
+        $data['users'] = $userModel->where('id', $id)->first();
+        $data['services'] = $serviceModel->orderBy('id', 'ASC')->findAll();
+        return view('edit', $data);
+    }
+    public function update()
+    {
+
+    }
+
+
+    public function delete($id = ""){
+        $userModel = new UserModel();
+        $userModel->where('id', $id)->delete($id);
+        return $this->response->redirect(site_url('/'));
+    } 
 }

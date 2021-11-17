@@ -11,14 +11,16 @@
 <body>
     
 <div class="container">
-    <?php $validation = \Config\Services::validation(); ?>
+    <?php $validation = \Config\Services::validation(); 
+    dd($users);
+    ?>
     <div class="row">
         <div class="col-md-6">
 
-            <form method="post" action="<?= site_url('/new-form') ?>">
+            <form method="post" action="<?= site_url('/edit-form') ?>">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Nom</label>
-                    <input type="text" class="form-control"  name="lname" placeholder="Nom">
+                    <input type="text" class="form-control" value="<?= $users[0]['lastname'] ?>"  name="lname" placeholder="Nom">
                     <!-- Error -->
                     <?php if($validation->getError('lname')) {?>
                         <div class='alert alert-danger mt-2'>
@@ -28,7 +30,7 @@
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Prénom</label>
-                    <input type="text" class="form-control" name="fname" placeholder="Prénom">
+                    <input type="text" class="form-control" value="<?= $users['firstname'] ?>" name="fname" placeholder="Prénom">
                     <?php if($validation->getError('fname')) {?>
                         <div class='alert alert-danger mt-2'>
                         <?= $error = $validation->getError('fname'); ?>
@@ -37,7 +39,7 @@
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Adresse</label>
-                    <input type="text" class="form-control"  name="address" placeholder="Adresse">
+                    <input type="text" class="form-control" value="<?= $users['address'] ?>" name="address" placeholder="Adresse">
                     <?php if($validation->getError('address')) {?>
                         <div class='alert alert-danger mt-2'>
                         <?= $error = $validation->getError('address'); ?>
@@ -46,20 +48,20 @@
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Code postal</label>
-                    <input type="text" class="form-control"  name="zcode" placeholder="Code postal">
+                    <input type="text" class="form-control" value="<?= $users['zip_code'] ?>" name="zcode" placeholder="Code postal">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Téléphone</label>
-                    <input type="text" class="form-control"  name="phone" placeholder="Adresse">
+                    <input type="text" class="form-control" value="<?= $users['phone'] ?>"  name="phone" placeholder="Adresse">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Date de naissance</label>
-                    <input type="date" class="form-control"  name="date" >
+                    <input type="date" class="form-control" value="<?= $users['birthdate'] ?>"  name="date" >
                 </div>
                 <div class="form-group">
                     <label for="exampleFormControlSelect1">Service</label>
-                    <select class="form-control" name="service">
-                        <option value="">Service</option>
+                    <select class="form-control" value="<?= $users['service_id'] ?>" name="service">
+                        <option selected="selected"><?= $users['service_id'] ?></option>
                         <?php foreach($services as $service): ?>
                             <option value="<?= $service['id'] ?>"><?= $service['name'] ?></option>
                         <?php endforeach; ?>
