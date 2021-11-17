@@ -34,6 +34,7 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'Users::index');
 $routes->get('delete/(:num)', 'Users::delete/$1');
 $routes->get('/new', 'Users::new');
+$routes->post('/submit-form', 'Users::store');
 
 
 

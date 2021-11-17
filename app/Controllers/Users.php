@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\UserModel;
+use App\Models\ServiceModel;
 
 class Users extends BaseController
 {
@@ -24,6 +25,54 @@ class Users extends BaseController
     }  
     public function new()
     {
-        return view('new');
+        $serviceModel = new ServiceModel();
+        $data['services'] = $serviceModel->orderBy('id', 'ASC')->findAll();
+        return view('new',$data);
+    }
+    public function store()
+    {
+        helper(['form', 'url']);
+        $validated = $this->validate([
+            'fname' => 'required|max_length[50]',
+            'lname' => 'required|max_length[50]',
+            'date' => 'required',
+            'address' => 'required',
+            'zcode' => 'required|max_length[5]',
+            'phone' => 'required|max_length[10]',
+            'service' => 'required',
+
+
+        ]);
+        $userModel = new UserModel();
+        
+
+        if (!$validated) 
+        {
+            $data = $userModel->join();
+            echo view('index', [
+                'validation' => $this->validator,
+                'users'=>$data,
+            ]);
+           
+
+        } 
+        else 
+        {
+            $data = array(
+            'firstname' => $this->request->getVar('fname'),
+            'lastname' => $this->request->getVar('lname'),
+            'birthdate' => $this->request->getVar('date'),
+            'address' => $this->request->getVar('address'),
+            'zip_code' => $this->request->getVar('zcode'),
+            'phone' => $this->request->getVar('phone'),
+            'service_id' => $this->request->getVar('service'),
+
+
+            ); 
+            $userModel->save($data);
+            return $this->response->redirect(site_url('/'));
+        }
+        
+        
     }
 }

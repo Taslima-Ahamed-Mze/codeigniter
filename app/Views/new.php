@@ -11,47 +11,66 @@
 <body>
     
 <div class="container">
-   
+    <?php $validation = \Config\Services::validation(); ?>
     <div class="row">
-        <form>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Nom</label>
-                <input type="text" class="form-control"  aria-describedby="emailHelp" placeholder="Nom">
-            </div>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Prénom</label>
-                <input type="text" class="form-control"  aria-describedby="emailHelp" placeholder="Prénom">
-            </div>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Adresse</label>
-                <input type="text" class="form-control"  aria-describedby="emailHelp" placeholder="Adresse">
-            </div>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Code postal</label>
-                <input type="text" class="form-control"  aria-describedby="emailHelp" placeholder="Code postal">
-            </div>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Téléphone</label>
-                <input type="text" class="form-control"  aria-describedby="emailHelp" placeholder="Adresse">
-            </div>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Date de naissance</label>
-                <input type="date" class="form-control"  aria-describedby="emailHelp" >
-            </div>
-            <div class="form-group">
-                <label for="exampleFormControlSelect1">Service</label>
-                <select class="form-control" id="exampleFormControlSelect1">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Ajouter</button>
-        </form>
+        <div class="col-md-6">
+
+            <form method="post" action="<?= site_url('/submit-form') ?>">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Nom</label>
+                    <input type="text" class="form-control"  name="lname" placeholder="Nom">
+                    <!-- Error -->
+                    <?php if($validation->getError('lname')) {?>
+                        <div class='alert alert-danger mt-2'>
+                        <?= $error = $validation->getError('lname'); ?>
+                        </div>
+                    <?php }?>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Prénom</label>
+                    <input type="text" class="form-control" name="fname" placeholder="Prénom">
+                    <?php if($validation->getError('fname')) {?>
+                        <div class='alert alert-danger mt-2'>
+                        <?= $error = $validation->getError('fname'); ?>
+                        </div>
+                    <?php }?>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Adresse</label>
+                    <input type="text" class="form-control"  name="address" placeholder="Adresse">
+                    <?php if($validation->getError('address')) {?>
+                        <div class='alert alert-danger mt-2'>
+                        <?= $error = $validation->getError('address'); ?>
+                        </div>
+                    <?php }?>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Code postal</label>
+                    <input type="text" class="form-control"  name="zcode" placeholder="Code postal">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Téléphone</label>
+                    <input type="text" class="form-control"  name="phone" placeholder="Adresse">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Date de naissance</label>
+                    <input type="date" class="form-control"  name="date" >
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Service</label>
+                    <select class="form-control" name="service">
+                        <option value="">Service</option>
+                        <?php foreach($services as $service): ?>
+                            <option value="<?= $service['id'] ?>"><?= $service['name'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+            </form>
+        </div>
         
             
+        
         
                
     </div>

@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class ServiceModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'services';
+    protected $table            = 'service';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
