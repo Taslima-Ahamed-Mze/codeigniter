@@ -13,8 +13,18 @@ class Users extends BaseController
     public function index()
     {
         $userModel = new UserModel();
-        $data['users'] = $userModel->join();
-        // $data['users'] = $userModel->orderBy('id', 'DESC')->findAll();
+        $serviceModel = new ServiceModel();
+        $id = $this->request->getVar('service');
+        
+        if($id==null)
+        {
+            $data['users'] = $userModel->listUser();
+        }
+        else
+        {
+            $data['users'] = $userModel->listUserByService($id);
+        }
+        $data['services'] = $serviceModel->orderBy('id', 'ASC')->findAll();
         return view('index', $data);
     }
  
@@ -24,7 +34,7 @@ class Users extends BaseController
         $data['services'] = $serviceModel->orderBy('id', 'ASC')->findAll();
         return view('new',$data);
     }
-    public function store()
+    public function store($id=null)
     {
         helper(['form', 'url']);
         $validated = $this->validate([
@@ -43,7 +53,7 @@ class Users extends BaseController
 
         if (!$validated) 
         {
-            $data = $userModel->join();
+            $data = $userModel->listUser();
             echo view('index', [
                 'validation' => $this->validator,
                 'users'=>$data,
@@ -63,24 +73,40 @@ class Users extends BaseController
             'service_id' => $this->request->getVar('service'),
 
             ); 
-            $userModel->save($data);
-            return $this->response->redirect(site_url('/'));
+            if($id==null)
+            {
+
+                if($userModel->save($data))
+                {
+                    session()->setFlashdata('message', "Utilisateur ajouté avec succés");
+                    session()->setFlashdata('alert-class', 'alert-success');
+                    return $this->response->redirect(site_url('/'));
+                }
+                else
+                {
+                    session()->setFlashdata('message', "Echec d'ajout");
+                    session()->setFlashdata('alert-class', 'alert-danger');
+    
+                   return redirect()->route('/new')->withInput(); 
+                }
+            }else{
+                $userModel->update($id,$data);
+                return $this->response->redirect(site_url('/'));
+            }
+            
         }  
     }
     public function edit($id = null)
     {
         $userModel = new UserModel();
         $serviceModel = new ServiceModel();
-        //$data['users'] = $userModel->findOne($id);
+        $data['users'] = $userModel->findOne($id);
 
-        $data['users'] = $userModel->where('id', $id)->first();
+        //$data['users'] = $userModel->where('id', $id)->first();
         $data['services'] = $serviceModel->orderBy('id', 'ASC')->findAll();
         return view('edit', $data);
     }
-    public function update()
-    {
-
-    }
+    
 
 
     public function delete($id = ""){
@@ -89,3 +115,4 @@ class Users extends BaseController
         return $this->response->redirect(site_url('/'));
     } 
 }
+

@@ -36,6 +36,8 @@ $routes->get('delete/(:num)', 'Users::delete/$1');
 $routes->get('/new', 'Users::new');
 $routes->post('/new-form', 'Users::store');
 $routes->get('edit/(:num)', 'Users::edit/$1');
+$routes->post('/edit-form/(:num)', 'Users::store/$1');
+
 
 
 

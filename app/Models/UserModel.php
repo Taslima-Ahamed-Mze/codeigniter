@@ -41,15 +41,13 @@ class UserModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function join()
+    public function listUser()
     {
         $builder = $this->db->table('users');
         $builder->select('users.*,service.name');
         $builder->join('service', 'service.id = users.service_id');
         $query = $builder->get();
         return $query->getResult();
-        
-
     }
     public function findOne($id)
     {
@@ -59,7 +57,14 @@ class UserModel extends Model
         $builder->where('users.id', $id);
         $query = $builder->get();
         return $query->getResult();
-        
-
+    }
+    public function listUserByService($id)
+    {
+        $builder = $this->db->table('users');
+        $builder->select('users.*,service.name');
+        $builder->join('service', 'service.id = users.service_id');
+        $builder->where('users.service_id', $id);
+        $query = $builder->get();
+        return $query->getResult();
     }
 }

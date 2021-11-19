@@ -12,9 +12,11 @@
     
 <div class="container">
     <?php $validation = \Config\Services::validation(); ?>
-    <div class="row">
-        <div class="col-md-6">
-
+    <div class="row justify-content-md-center">
+        
+        <div class="col-lg-6">
+            <h3>Ajouter un utilisateur</h3>
+            
             <form method="post" action="<?= site_url('/new-form') ?>">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Nom</label>
