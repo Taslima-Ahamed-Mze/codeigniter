@@ -51,7 +51,6 @@ class Users extends BaseController
         $userModel = new UserModel();
         $serviceModel = new ServiceModel();
         
-
         if (!$validated) 
         {
             if($id==null)
