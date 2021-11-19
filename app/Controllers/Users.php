@@ -38,37 +38,49 @@ class Users extends BaseController
     {
         helper(['form', 'url']);
         $validated = $this->validate([
-            'fname' => 'required|max_length[50]',
-            'lname' => 'required|max_length[50]',
-            'date' => 'required',
+            'firstname' => 'required|max_length[50]',
+            'lastname' => 'required|max_length[50]',
+            'birthdate' => 'required',
             'address' => 'required',
-            'zcode' => 'required|max_length[5]',
+            'zip_code' => 'required|max_length[5]',
             'phone' => 'required|max_length[10]',
             'service' => 'required',
 
 
         ]);
         $userModel = new UserModel();
+        $serviceModel = new ServiceModel();
         
 
         if (!$validated) 
         {
-            $data = $userModel->listUser();
-            echo view('index', [
-                'validation' => $this->validator,
-                'users'=>$data,
-            ]);
+            if($id==null)
+            {
+                $data = $userModel->listUser();
+                echo view('new', [
+                    'validation' => $this->validator,
+                    'users'=>$data,
+                    'services'=>$serviceModel->orderBy('id', 'ASC')->findAll(),
+                ]);
+            }else{
+                
+                echo view('edit', [
+                    'validation' => $this->validator,
+                    'users'=>$userModel->findOne($id),
+                    'services'=>$serviceModel->orderBy('id', 'ASC')->findAll(),
+                ]);
+            }
            
 
         } 
         else 
         {
             $data = array(
-            'firstname' => $this->request->getVar('fname'),
-            'lastname' => $this->request->getVar('lname'),
-            'birthdate' => $this->request->getVar('date'),
+            'firstname' => $this->request->getVar('firstname'),
+            'lastname' => $this->request->getVar('lastname'),
+            'birthdate' => $this->request->getVar('birthdate'),
             'address' => $this->request->getVar('address'),
-            'zip_code' => $this->request->getVar('zcode'),
+            'zip_code' => $this->request->getVar('zip_code'),
             'phone' => $this->request->getVar('phone'),
             'service_id' => $this->request->getVar('service'),
 
@@ -90,6 +102,19 @@ class Users extends BaseController
                    return redirect()->route('/new')->withInput(); 
                 }
             }else{
+                if($userModel->update($id,$data))
+                {
+                    session()->setFlashdata('message', "Utilisateur modifié avec succés");
+                    session()->setFlashdata('alert-class', 'alert-success');
+                    return $this->response->redirect(site_url('/'));
+                }
+                else{
+                    session()->setFlashdata('message', "Echec d'ajout");
+                    session()->setFlashdata('alert-class', 'alert-danger');
+    
+                   return redirect()->route('/edit')->withInput();
+                }
+
                 $userModel->update($id,$data);
                 return $this->response->redirect(site_url('/'));
             }
@@ -109,7 +134,7 @@ class Users extends BaseController
     
 
 
-    public function delete($id = ""){
+    public function delete($id =null){
         $userModel = new UserModel();
         $userModel->where('id', $id)->delete($id);
         return $this->response->redirect(site_url('/'));
